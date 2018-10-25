@@ -2,17 +2,18 @@ import random
 import sys
 import math
 
-if (len(sys.argv) > 2):
-    script, N, e, M = sys.argv
+if (len(sys.argv) == 4):
+    script, N, ep, M = sys.argv
 else:
     print("sample size, epsilon, M")
     sys.exit(0)
 
-N = int(N)
-ep = float(e)
-M = int(M)
-mu = random.random()
-hoeff = float("{0:.5f}".format(2 * 1 / (math.e**(2 * ep**2 * N) ) ))
+N = int(N)  #sample size
+ep = float(ep)  #epsilon
+M = int(M)  #numero di esperimenti (ipotesi)
+mu = random.random()    #incognita
+
+hoeff = float("{0:.5f}".format(2 * (math.e**(-2 * ep**2 * N) ) ))   #parte destra dell' ineguaglianza di hoeffding
 
 print("N : ", N)
 print("ep : ", ep)
@@ -20,26 +21,17 @@ print("ep : ", ep)
 print("Hoeffding : 2 * e^(-2 * {} * {}) = {}\n".format("{0:.5f}".format(ep**2), N, hoeff))
 
 for i in range(M):
-    palline = []
-    ngreen = 0
     nred = 0
-    sample = palline[0:N]
+    
+    #prendo N palline dal bin con probabilità mu
     for p in range(N):
         if random.random() < mu:
-            sample.append("red")
             nred += 1
-        else:
-            sample.append("green")
-            ngreen += 1
+    
+    #percentuale di palline rosse nel sample -> nred / N
+    nu = nred / N
 
+    print("{} -> nu = {}".format(i+1, nu))
 
-    selected = min(len(sample), 10)
-    dots = ""
-    if(len(sample) > 10):
-        dots = "..."
-    #print("samples = ",sample[0: selected], dots)
-
-    new = nred / N
-    print("{} -> nu = {}".format(i+1, new))
-
-    print("P( | {} - mu | > {} ) < {}\n".format(new, ep, (i+1)*hoeff))
+    #i + 1 è il numero di esperimenti fatti
+    print("P( | {} - mu | > {} ) < {}\n".format(nu, ep, (i+1) * hoeff))
