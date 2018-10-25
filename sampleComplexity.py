@@ -19,7 +19,6 @@ def testN(N):
 
     return N >= rightSide
 
-#fare dicotomica
 N = 2
 base = N
 top = N * 2
@@ -27,6 +26,7 @@ lastN = -1
 
 i = 1
 
+#use binary search
 while lastN != N:
     i += 1
     lastN = N
